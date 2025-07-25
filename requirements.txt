@@ -1,2 +1,7 @@
 gym==0.26.2
 numpy>=1.22
+pygame>=2.5.2
+stable-baselines3>=2.3.2 
+matplotlib>=3.8.0         
+imageio>=2.31.0 
+torch>=2.0.0

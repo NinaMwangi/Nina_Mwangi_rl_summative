@@ -39,9 +39,9 @@ class AngazaEnv(gym.Env):
         elif action == 3 and x < self.grid_size - 1:   # Right
             x += 1
         elif action == 4:
-            pass  # Hide (no move) — reward shaping later
+            pass  # Hide 
         elif action == 5:
-            pass  # Send alert — reward shaping later
+            pass  # Send alert 
 
         self.agent_pos = np.array([x, y], dtype=np.int32)
 
