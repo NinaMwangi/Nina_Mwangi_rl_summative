@@ -29,12 +29,13 @@ def capture_frame(screen):
 
 
 def run_random(env, renderer, steps, fps, save_gif, gif_path):
-    obs = env.reset()
+    obs, _ = env.reset()
     frames = []
 
     for step in range(steps):
         action = env.action_space.sample()
-        obs, reward, done, info = env.step(action)
+        obs, reward, terminated, truncated, info = env.step(action)
+        done = terminated or truncated
 
         renderer.render(env.agent_pos, env.threat_pos, env.safe_zone, fps=fps)
 
@@ -42,7 +43,7 @@ def run_random(env, renderer, steps, fps, save_gif, gif_path):
             frames.append(capture_frame(renderer.screen))
 
         if done:
-            obs = env.reset()
+            obs, _ = env.reset()
 
     if save_gif and frames:
         imageio.mimsave(gif_path, frames, fps=fps)
@@ -83,12 +84,13 @@ def run_model(env, renderer, steps, fps, save_gif, gif_path, model_path, determi
                 f"Could not load the model with known SB3 algorithms. Error: {e}"
             )
 
-    obs = env.reset()
+    obs, _ = env.reset()
     frames = []
 
     for step in range(steps):
         action, _ = model.predict(obs, deterministic=deterministic)
-        obs, reward, done, info = env.step(int(action))
+        obs, reward, terminated, truncated, info = env.step(int(action))
+        done = terminated or truncated
 
         renderer.render(env.agent_pos, env.threat_pos, env.safe_zone, fps=fps)
 
@@ -96,7 +98,7 @@ def run_model(env, renderer, steps, fps, save_gif, gif_path, model_path, determi
             frames.append(capture_frame(renderer.screen))
 
         if done:
-            obs = env.reset()
+            obs, _ = env.reset()
 
     if save_gif and frames:
         imageio.mimsave(gif_path, frames, fps=fps)
